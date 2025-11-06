@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LNER 24‑Day Daily Quiz</title>
+  <title>LNER 24-Day Daily Quiz</title>
   <meta name="description" content="LNER: a fresh daily quiz that unlocks at 10:00 and closes at 16:00 UK time."/>
   <link rel="preload" href="assets/lner-logo.svg" as="image">
   <link rel="stylesheet" href="style.css" />
@@ -53,6 +53,27 @@
       <ul id="winnerList" class="winners"></ul>
     </section>
   </main>
+
+  <!-- Dev Override UI. Visible when ?dev=1 or #dev -->
+  <button id="devToggle" class="dev-toggle" style="display:none">DEV</button>
+  <aside id="devPanel" class="dev-panel" aria-live="polite">
+    <h4>Time/Date Override</h4>
+    <div class="hint">Simulate any state without touching system time.</div>
+    <div class="row">
+      <input id="devDate" class="input" type="date" />
+      <input id="devTime" class="input" type="time" step="60" />
+    </div>
+    <div class="row">
+      <button id="devApply" class="btn">Apply</button>
+      <button id="devClear" class="btn">Clear</button>
+    </div>
+    <div class="row">
+      <button id="devMinusHour" class="btn">-1h</button>
+      <button id="devPlusHour" class="btn">+1h</button>
+      <button id="devPlusDay" class="btn">+1d</button>
+    </div>
+    <div class="hint">Current effective time: <span id="devNow" class="pill">—</span></div>
+  </aside>
 
   <footer class="container site-footer">
     <p class="fineprint">Times shown and enforced in Europe/London. This is a lightweight, privacy-friendly quiz. IP is used only to limit repeat attempts per day.</p>
