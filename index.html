@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LNER 24‑Day Daily Quiz</title>
+  <meta name="description" content="LNER: a fresh daily quiz that unlocks at 10:00 and closes at 16:00 UK time."/>
+  <link rel="preload" href="assets/lner-logo.svg" as="image">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header container">
+    <img src="assets/lner-logo.svg" alt="LNER" class="logo" />
+    <div class="title-wrap">
+      <h1 class="site-title">LNER Daily Quiz</h1>
+      <p class="site-sub">Opens 10:00 and closes 16:00, London time</p>
+    </div>
+    <div class="status-pill" id="statusPill">Loading…</div>
+  </header>
+
+  <main class="container">
+    <section id="notice" class="card hidden" aria-live="polite"></section>
+
+    <section id="quizCard" class="card hidden">
+      <div class="quiz-meta">
+        <div id="dayLabel" class="day-label">Day –</div>
+        <div id="windowLabel" class="window-label">—</div>
+      </div>
+      <div id="questionWrap">
+        <h2 id="questionText"></h2>
+        <ul id="choices" class="choices"></ul>
+      </div>
+      <div id="feedback" class="feedback hidden"></div>
+
+      <form id="entryForm" class="entry-form hidden" autocomplete="on">
+        <label for="entrantName" class="label">You’re in the prize draw. Add your name:</label>
+        <div class="row">
+          <input id="entrantName" name="entrantName" class="input" maxlength="80" placeholder="Your name" required />
+          <button type="submit" class="btn">Submit</button>
+        </div>
+        <p class="fineprint">One entry per person per day. Names are visible to the draw admin.</p>
+      </form>
+    </section>
+
+    <section id="winnerCard" class="card hidden" aria-live="polite">
+      <h2 class="winner-title">Today’s winner</h2>
+      <div id="winnerName" class="winner-name">—</div>
+      <p class="next-msg">Back again tomorrow from 10:00.</p>
+    </section>
+
+    <section id="archiveCard" class="card hidden">
+      <h3>Previous winners</h3>
+      <ul id="winnerList" class="winners"></ul>
+    </section>
+  </main>
+
+  <footer class="container site-footer">
+    <p class="fineprint">Times shown and enforced in Europe/London. This is a lightweight, privacy-friendly quiz. IP is used only to limit repeat attempts per day.</p>
+  </footer>
+
+  <script type="module">
+    import { Backend } from './backend/mock-local.js';
+    import { runQuiz } from './app.js';
+
+    // Configure your quiz here
+    const CONFIG = {
+      startDateISO: '2025-12-01',          // yyyy-mm-dd (local date, no time)
+      totalDays: 24,                       // length of campaign
+      tz: 'Europe/London',
+      openHour: 10,
+      closeHour: 16,
+      brand: { primary: '#9D2235', accent: '#C60C30' }
+    };
+
+    // Swap Backend to gsheet-adapter.js once you’ve configured it.
+    const backend = new Backend(CONFIG);
+
+    runQuiz(CONFIG, backend);
+  </script>
+</body>
+</html>

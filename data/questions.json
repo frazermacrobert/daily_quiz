@@ -1,0 +1,297 @@
+{
+  "meta": {
+    "version": 1,
+    "startDateISO": "2025-12-01",
+    "totalDays": 24
+  },
+  "questions": [
+    {
+      "id": "d1",
+      "question": "What does LNER stand for?",
+      "choices": [
+        "London North Eastern Railway",
+        "Leeds Northern Express Route",
+        "Long National Express Rail",
+        "London North East Road"
+      ],
+      "answerIndex": 0,
+      "explain": "LNER is London North Eastern Railway, operating on the East Coast Main Line."
+    },
+    {
+      "id": "d2",
+      "question": "Sample question 2?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d3",
+      "question": "Sample question 3?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d4",
+      "question": "Sample question 4?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d5",
+      "question": "Sample question 5?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d6",
+      "question": "Sample question 6?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d7",
+      "question": "Sample question 7?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d8",
+      "question": "Sample question 8?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d9",
+      "question": "Sample question 9?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d10",
+      "question": "Sample question 10?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d11",
+      "question": "Sample question 11?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d12",
+      "question": "Sample question 12?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d13",
+      "question": "Sample question 13?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d14",
+      "question": "Sample question 14?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d15",
+      "question": "Sample question 15?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d16",
+      "question": "Sample question 16?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d17",
+      "question": "Sample question 17?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d18",
+      "question": "Sample question 18?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d19",
+      "question": "Sample question 19?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d20",
+      "question": "Sample question 20?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d21",
+      "question": "Sample question 21?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d22",
+      "question": "Sample question 22?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d23",
+      "question": "Sample question 23?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    },
+    {
+      "id": "d24",
+      "question": "Sample question 24?",
+      "choices": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answerIndex": 1,
+      "explain": "This is placeholder copy. Replace with your real explanation."
+    }
+  ]
+}
