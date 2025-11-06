@@ -1,12 +1,69 @@
 // Core front-end logic for the LNER Daily Quiz
 // Handles: time window gating in Europe/London, rendering, answer flow,
 // IP-based single attempt, simple backend adapter for entries and winners.
+// Includes a developer time/date override panel (enabled with ?dev=1 or #dev).
+
 const qs = (s, el=document) => el.querySelector(s);
 const qsa = (s, el=document) => [...el.querySelectorAll(s)];
 
+/* =======================
+   Developer Override Helpers
+   ======================= */
+const OVK = 'lnerq:override';
+
+function getOverride(){
+  try { return JSON.parse(localStorage.getItem(OVK) || 'null'); }
+  catch(e){ return null; }
+}
+function setOverride(obj){
+  if(!obj) localStorage.removeItem(OVK);
+  else localStorage.setItem(OVK, JSON.stringify(obj));
+}
+function showDevUIIfWanted(){
+  const want = /[?#&](dev|debug)=?1|#dev/i.test(location.href);
+  const btn = qs('#devToggle');
+  const panel = qs('#devPanel');
+  if(btn && panel){
+    btn.style.display = want ? 'inline-flex' : 'none';
+    if(want){
+      btn.addEventListener('click', () => panel.classList.toggle('open'));
+      // Pre-fill fields from stored override
+      const ov = getOverride();
+      if(ov){
+        if(ov.date) qs('#devDate').value = ov.date;
+        if(ov.time) qs('#devTime').value = ov.time;
+      }
+      // Wire controls
+      qs('#devApply')?.addEventListener('click', () => {
+        const date = qs('#devDate').value || null;
+        const time = qs('#devTime').value || null;
+        if(!date && !time){ setOverride(null); location.reload(); return; }
+        setOverride({ date, time });
+        location.reload();
+      });
+      qs('#devClear')?.addEventListener('click', () => { setOverride(null); location.reload(); });
+      qs('#devMinusHour')?.addEventListener('click', () => nudgeOverride({ hours:-1 }));
+      qs('#devPlusHour')?.addEventListener('click', () => nudgeOverride({ hours:1 }));
+      qs('#devPlusDay')?.addEventListener('click', () => nudgeOverride({ days:1 }));
+    }
+  }
+}
+function nudgeOverride({ hours=0, days=0 }){
+  const base = effectiveNow('Europe/London');
+  base.setHours(base.getHours()+hours);
+  base.setDate(base.getDate()+days);
+  const pad = n => String(n).padStart(2,'0');
+  const date = `${base.getFullYear()}-${pad(base.getMonth()+1)}-${pad(base.getDate())}`;
+  const time = `${pad(base.getHours())}:${pad(base.getMinutes())}`;
+  setOverride({ date, time });
+  location.reload();
+}
+
+/* =======================
+   Time / Formatting Helpers
+   ======================= */
 function fmtRange(tz, openHour, closeHour){
-  const open = new Date(); const close = new Date();
-  const now = new Date();
+  const open = new Date(); const close = new Date(); const now = new Date();
   const nowTz = new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour:'2-digit', minute:'2-digit' }).format(now);
   open.setHours(openHour,0,0,0); close.setHours(closeHour,0,0,0);
   const openTz = new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour:'2-digit', minute:'2-digit' }).format(open);
@@ -25,31 +82,43 @@ async function getPublicIP(){
   }
 }
 
-function getLondonNow(tz){
-  // Use the tz to compute the current date/time components reliably.
+/**
+ * effectiveNow(tz)
+ * Returns a Date constructed from either the developer override (if present),
+ * or the real current time, projected into the given IANA timezone.
+ */
+function effectiveNow(tz){
+  const ov = getOverride();
+  if(ov && (ov.date || ov.time)){
+    const nowReal = new Date();
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: tz, year:'numeric', month:'2-digit', day:'2-digit',
+      hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false
+    }).formatToParts(nowReal).reduce((a,p)=> (a[p.type]=p.value, a), {});
+    const ymd = ov.date || `${parts.year}-${parts.month}-${parts.day}`;
+    const hm  = ov.time || `${parts.hour}:${parts.minute}`;
+    return new Date(`${ymd}T${hm}:00`);
+  }
   const now = new Date();
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone: tz, year:'numeric', month:'2-digit', day:'2-digit',
     hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false
-  }).formatToParts(now);
-  const by = Object.fromEntries(parts.map(p => [p.type, p.value]));
-  const iso = `${by.year}-${by.month}-${by.day}T${by.hour}:${by.minute}:${by.second}`;
-  return new Date(iso.replace(' ', 'T'));
+  }).formatToParts(now).reduce((a,p)=> (a[p.type]=p.value, a), {});
+  return new Date(`${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}`);
 }
+
+// Backwards-compat wrapper in case anything else calls getLondonNow()
+function getLondonNow(tz){ return effectiveNow(tz); }
 
 function dayIndexFromStart(startISO, tz){
   const start = new Date(startISO + 'T00:00:00');
-  const now = getLondonNow(tz);
+  const now = effectiveNow(tz);
   const ms = now - start;
   return Math.floor(ms / (1000*60*60*24));
 }
 
 function inWindow(now, tz, openHour, closeHour){
-  const y = now.getFullYear(), m = now.getMonth(), d = now.getDate();
-  const open = new Date(Date.UTC(y, m, d, openHour-1, 0, 0));
-  const close = new Date(Date.UTC(y, m, d, closeHour-1, 0, 0));
-  // The -1 adjustment is a crude shim; we rely on rendering via getLondonNow for correctness.
-  // Gate by comparing hour values in the tz directly:
+  // Compare hour value as displayed in the target tz
   const hour = parseInt(new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour:'2-digit', hour12:false }).format(now), 10);
   return hour >= openHour && hour < closeHour;
 }
@@ -62,6 +131,9 @@ async function pickWinnerRandom(entries){
   return { name: entries[idx].name, ts: Date.now() };
 }
 
+/* =======================
+   App
+   ======================= */
 export async function runQuiz(CONFIG, backend){
   const {
     startDateISO, totalDays, tz, openHour, closeHour
@@ -100,7 +172,7 @@ export async function runQuiz(CONFIG, backend){
   function hideNotice(){ ui.notice.classList.add('hidden'); }
 
   const idx = dayIndexFromStart(startDateISO, tz);
-  const now = getLondonNow(tz);
+  const now = effectiveNow(tz);
   const windowOpen = inWindow(now, tz, openHour, closeHour);
 
   // Base labels
@@ -126,7 +198,7 @@ export async function runQuiz(CONFIG, backend){
   }
   if(idx >= totalDays){
     renderStatus('closed');
-    setNotice(`<p>The 24‑day quiz is complete. Thanks for playing.</p>`);
+    setNotice(`<p>The 24-day quiz is complete. Thanks for playing.</p>`);
     return;
   }
 
@@ -237,3 +309,19 @@ export async function runQuiz(CONFIG, backend){
     }
   });
 }
+
+/* =======================
+   Dev UI bootstrap (badge clock)
+   ======================= */
+document.addEventListener('DOMContentLoaded', () => {
+  showDevUIIfWanted();
+  const badge = document.getElementById('devNow');
+  if(badge){
+    const now = effectiveNow('Europe/London');
+    const fmt = new Intl.DateTimeFormat('en-GB', {
+      year:'numeric', month:'2-digit', day:'2-digit',
+      hour:'2-digit', minute:'2-digit', second:'2-digit'
+    });
+    badge.textContent = fmt.format(now);
+  }
+});
